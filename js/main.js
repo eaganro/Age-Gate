@@ -1,16 +1,19 @@
 const AgeGate = function(gateOptions = {}) {
 
+  // Dont render age gate if they are remembered in localstorage
   if (localStorage.getItem('ofAge') === 'true') {
     return;
   }
 
+  // Default options combine with parameter options
   let defaultOptions = {
     age: 21,
-    header: 'WELCOME TO WYNG MAKE THIS LONGER',
+    header: 'WELCOME TO WYNG',
     logo: 'https://pbs.twimg.com/profile_images/793821947738062848/SMVsLW5n_400x400.jpg',
   };
   const userOptions = Object.assign({}, defaultOptions, gateOptions);
 
+  // On submit check if user is of age. Render Correct message and action.
   const submitAge = function() {
     let today = new Date();
     let selectedYear = yearSelect.options[yearSelect.selectedIndex].value;
@@ -28,30 +31,40 @@ const AgeGate = function(gateOptions = {}) {
     }
   }
 
+  // Create overall container
   let gate = document.createElement('div');
   gate.classList.add('ageGate');
 
   let flexContainer = document.createElement('div');
   flexContainer.classList.add('flexContainer');
 
+  // Create logo area
+  let logoContainer = document.createElement('div');
+  logoContainer.classList.add('logoContainer');
   let logo = document.createElement('img');
   logo.src = userOptions.logo;
-  flexContainer.appendChild(logo);
+  logoContainer.appendChild(logo);
+  flexContainer.appendChild(logoContainer);
 
+  // Create header area
   let header = document.createElement('div');
   header.innerHTML = userOptions.header;
   header.classList.add('headerText');
-  flexContainer.appendChild(header);
+  logoContainer.appendChild(header);
+  flexContainer.appendChild(logoContainer);
 
+  // Create inputs area
+  let inputContainer = document.createElement('div');
+  inputContainer.classList.add('inputContainer');
   let enterAge = document.createElement('div');
   enterAge.innerHTML = 'Please enter your date of birth.';
-  enterAge.classList.add('enterAge');
-  flexContainer.appendChild(enterAge);
+  inputContainer.appendChild(enterAge);
 
+  // Create selects area
   let selectsContainer = document.createElement('div');
-  selectsContainer.classList.add('selectsContainer');
-  flexContainer.appendChild(selectsContainer);
+  inputContainer.appendChild(selectsContainer);
 
+  // Create month select with month options and on change function for days
   let monthSelect = document.createElement('select');
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   months.forEach((month, i) => {
@@ -82,6 +95,7 @@ const AgeGate = function(gateOptions = {}) {
   };
   selectsContainer.appendChild(monthSelect);
 
+  // Create day select with day options
   let daySelect = document.createElement('select');
   for (let i = 1; i <= 31; i += 1) {
     let option = document.createElement('option');
@@ -92,6 +106,7 @@ const AgeGate = function(gateOptions = {}) {
   daySelect.setAttribute('id', 'daySelect');
   selectsContainer.appendChild(daySelect);
 
+  // Create year select with year options and on change function for leap years
   let yearSelect = document.createElement('select');
   let currentYear = new Date().getFullYear();
   for (let i = 0; i < 120; i += 1) {
@@ -120,12 +135,13 @@ const AgeGate = function(gateOptions = {}) {
   yearSelect.setAttribute('id', 'yearSelect');
   selectsContainer.appendChild(yearSelect);
 
-  let submitDiv = document.createElement('div');
+  // Create submit button
   let submitButton = document.createElement('button');
   submitButton.innerHTML = 'ENTER';
   submitButton.onclick = submitAge;
-  submitDiv.appendChild(submitButton);
+  inputContainer.appendChild(submitButton);
 
+  // Create remember me checkbox
   let checkboxDiv = document.createElement('div');
   checkboxDiv.classList.add('checkboxContainer');
   let rememberMe = document.createElement('input');
@@ -136,17 +152,19 @@ const AgeGate = function(gateOptions = {}) {
   rememberMeLabel.innerHTML = 'Remember Me';
   checkboxDiv.appendChild(rememberMe);
   checkboxDiv.appendChild(rememberMeLabel);
+  inputContainer.appendChild(checkboxDiv);
 
 
-  submitDiv.appendChild(checkboxDiv);
-  flexContainer.appendChild(submitDiv);
-
+  // Create message to user
   let message = document.createElement('div');
   message.innerHTML = 'You must be of legal age to access this site.';
   message.classList.add('message');
-  flexContainer.appendChild(message);
+  inputContainer.appendChild(message);
+
+  flexContainer.appendChild(inputContainer);
   gate.appendChild(flexContainer);
 
+  // Add all created elements to page
   let body = document.querySelector('body');
   body.insertAdjacentElement('afterbegin', gate);
 }
