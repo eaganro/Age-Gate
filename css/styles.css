@@ -9,7 +9,8 @@
   top: 0;
   left: 0;
   overflow-y: scroll;
-  z-index: 100; }
+  z-index: 100;
+  line-height: normal; }
   .ageGate html {
     line-height: 1.15;
     -webkit-text-size-adjust: 100%; }
